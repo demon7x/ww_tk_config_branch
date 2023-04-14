@@ -50,7 +50,7 @@ primary:
     # at setup time.
     mac_path:
     linux_path:
-    windows_path:
+    windows_path: \show
 
     # indicates that this is the default storage root
     default: true
