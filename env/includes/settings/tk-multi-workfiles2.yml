@@ -226,8 +226,13 @@ settings.tk-multi-workfiles2.houdini.shot_step:
 
 # ---- Maya
 
+settings.tk-multi-workfiles2.maya.project:
+  hook_scene_operation: "{config}/tk-multi-workfiles2/scene_operation_tk-maya.py"
+  location: "@apps.tk-multi-workfiles2.location"
+
 # asset_step
 settings.tk-multi-workfiles2.maya.asset_step:
+  hook_scene_operation: "{config}/tk-multi-workfiles2/scene_operation_tk-maya.py"
   template_publish: maya_asset_publish
   template_publish_area: asset_publish_area_maya
   template_work: maya_asset_work
@@ -255,6 +260,7 @@ settings.tk-multi-workfiles2.maya.asset_step:
 
 # shot_step
 settings.tk-multi-workfiles2.maya.shot_step:
+  hook_scene_operation: "{config}/tk-multi-workfiles2/scene_operation_tk-maya.py"
   template_publish: maya_shot_publish
   template_publish_area: shot_publish_area_maya
   template_work: maya_shot_work
@@ -279,7 +285,6 @@ settings.tk-multi-workfiles2.maya.shot_step:
       link_field: entity
       hierarchy: [step]
   location: '@apps.tk-multi-workfiles2.location'
-
 ################################################################################
 
 # ---- nuke
