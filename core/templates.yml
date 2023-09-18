@@ -14,7 +14,6 @@
 # this file. For more information, see the Shotgun Pipeline Toolkit Documentation.
 
 # Include templates and keys for the unreal integration
-include: ../env/includes/unreal/templates.yml
 # These keys and templates can be overridden here after the include call
 
 keys:
