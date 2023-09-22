@@ -146,4 +146,4 @@ frameworks: '@frameworks'
 apps.tk-download.location:
   name: tk-download
   type: git
-  path: https://github.com/onetera/tk-config-remote_ww.git
+  path: https://github.com/onetera/tk-download.git
