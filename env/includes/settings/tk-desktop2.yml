@@ -16,6 +16,7 @@ includes:
 - ../engine_locations.yml
 - ./tk-multi-launchapp.yml
 - ./tk-multi-publish2.yml
+- ./tk-download.yml
 
 ################################################################################
 
