@@ -18,7 +18,7 @@ from tank import TankError
 from tank.platform.qt import QtGui
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from execute_command import TimeLogManager
+# from execute_command import TimeLogManager
 
 class SceneOperation(Hook):
     """
@@ -79,12 +79,12 @@ class SceneOperation(Hook):
             # the scene it currently has open!   
             cmds.file(new=True, force=True) 
             cmds.file(file_path, open=True, force=True)
-            TimeLogManager( user, tool, project_name, shot_name, file_name, 'OPEN' )
+            # TimeLogManager( user, tool, project_name, shot_name, file_name, 'OPEN' )
 
         elif operation == "save":
             # save the current scene:
             cmds.file(save=True)
-            TimeLogManager( user, tool, project_name, shot_name, file_name, 'SAVE' )
+            # TimeLogManager( user, tool, project_name, shot_name, file_name, 'SAVE' )
 
         elif operation == "save_as":
             # first rename the scene as file_path:
@@ -104,10 +104,10 @@ class SceneOperation(Hook):
                 cmds.file(save=True, force=True, type=maya_file_type)
             else:
                 cmds.file(save=True, force=True)
-            TimeLogManager( user, tool, project_name, shot_name, file_name, 'SAVE_AS' )
+            # TimeLogManager( user, tool, project_name, shot_name, file_name, 'SAVE_AS' )
                 
         elif operation == "prepare_new":
-            TimeLogManager( user, tool, project_name, shot_name, file_name, 'NEW_FILE' )
+            # TimeLogManager( user, tool, project_name, shot_name, file_name, 'NEW_FILE' )
 
         elif operation == "reset":
             """
