@@ -106,8 +106,8 @@ class SceneOperation(Hook):
                 cmds.file(save=True, force=True)
             # TimeLogManager( user, tool, project_name, shot_name, file_name, 'SAVE_AS' )
                 
-        elif operation == "prepare_new":
-            # TimeLogManager( user, tool, project_name, shot_name, file_name, 'NEW_FILE' )
+        # elif operation == "prepare_new":
+        #     TimeLogManager( user, tool, project_name, shot_name, file_name, 'NEW_FILE' )
 
         elif operation == "reset":
             """

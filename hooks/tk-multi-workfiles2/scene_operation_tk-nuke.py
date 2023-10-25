@@ -173,8 +173,8 @@ class SceneOperation(Hook):
                 nuke.root()["name"].setValue(old_path)
                 raise TankError("Failed to save scene %s", e)
 
-        elif operation == "prepare_new":
-            # TimeLogManager( user, tool, project_name, shot_name, file_name, 'NEW_FILE' )
+        # elif operation == "prepare_new":
+        #     TimeLogManager( user, tool, project_name, shot_name, file_name, 'NEW_FILE' )
 
 
         elif operation == "reset":

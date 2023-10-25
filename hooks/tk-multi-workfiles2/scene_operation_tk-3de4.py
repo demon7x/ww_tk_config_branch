@@ -83,8 +83,8 @@ class SceneOperation(HookClass):
             tde4.saveProject(file_path)
             # TimeLogManager( user, tool, project_name, shot_name, file_name, 'SAVE_AS' )
 
-        elif operation == "prepare_new":
-            # TimeLogManager( user, tool, project_name, shot_name, file_name, 'NEW_FILE' )
+        # elif operation == "prepare_new":
+        #     TimeLogManager( user, tool, project_name, shot_name, file_name, 'NEW_FILE' )
 
 
         elif operation == "reset":
