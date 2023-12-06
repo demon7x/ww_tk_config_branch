@@ -40,12 +40,16 @@ class NukeSessionPublishPlugin(HookBaseClass):
         contain simple html for formatting.
         """
 
+        loader_url = "https://support.shotgunsoftware.com/hc/en-us/articles/219033078"
+
         return """
-        This plugin publishes nuke scene file for the Shotgun. A <b>Publish</b> entry will be 
-        created in ShotGrid which will include a reference to the file's current path on disk. 
-        If a publish template is configured, 
-        a copy of the current session will be copied to the publish template path which
-        will be the file that is published.
+        Publishes the file to Shotgun. A <b>Publish</b> entry will be
+        created in Shotgun which will include a reference to the file's current
+        path on disk. If a publish template is configured, a copy of the
+        current session will be copied to the publish template path which
+        will be the file that is published. Other users will be able to access
+        the published file via the <b><a href='%s'>Loader</a></b> so long as
+        they have access to the file's location on disk.
 
         If the session has not been saved, validation will fail and a button
         will be provided in the logging output to save the file.
@@ -64,12 +68,27 @@ class NukeSessionPublishPlugin(HookBaseClass):
         <li><code>filename-v###.ext</code></li>
         </ul>
 
+        After publishing, if a version number is detected in the work file, the
+        work file will automatically be saved to the next incremental version
+        number. For example, <code>filename.v001.ext</code> will be published
+        and copied to <code>filename.v002.ext</code>
+
+        If the next incremental version of the file already exists on disk, the
+        validation step will produce a warning, and a button will be provided in
+        the logging output which will allow saving the session to the next
+        available version number prior to publishing.
+
+        <br><br><i>NOTE: any amount of version number padding is supported. for
+        non-template based workflows.</i>
+
         <h3>Overwriting an existing publish</h3>
         In non-template workflows, a file can be published multiple times,
         however only the most recent publish will be available to other users.
         Warnings will be provided during validation if there are previous
         publishes.
-        """
+        """ % (
+            loader_url,
+        )
 
     @property
     def settings(self):
@@ -150,11 +169,6 @@ class NukeSessionPublishPlugin(HookBaseClass):
         # if a publish template is configured, disable context change. This
         # is a temporary measure until the publisher handles context switching
         # natively.
-        acceted = True
-        if os.getenv('WW_LOCATION') != 'vietnam':
-            self.logger.debug("It does not have 'WW_LOCATION' environment variable.")
-            acceted = False
-            
         if settings.get("Publish Template").value:
             item.context_change_allowed = False
 
@@ -171,7 +185,7 @@ class NukeSessionPublishPlugin(HookBaseClass):
         self.logger.info(
             "Nuke '%s' plugin accepted the current Nuke script." % (self.name,)
         )
-        return {"accepted": acceted, "checked": True}
+        return {"accepted": True, "checked": True}
     
 
     def validate(self, settings, item):
@@ -291,93 +305,10 @@ class NukeSessionPublishPlugin(HookBaseClass):
 
         # get the path in a normalized state. no trailing separator, separators        
         # are appropriate for current os, no double separators, etc.
-
-        import sys
-
-        current_file = os.path.abspath(__file__)
-        current_dir = os.path.dirname(current_file)
-        cleanup_current_dir_split = current_dir.split(os.sep)
-        del cleanup_current_dir_split[-1]
-
-        cleanup_current_dir_split.append('ftp_action')
-        cleanup_current_dir_path = os.sep.join(cleanup_current_dir_split)
-
-        sys.path.append(cleanup_current_dir_path)
-
-        from ftputil import ftputil
-        import host
-
-        _host = None
-        source_path = ''
-        target_path = ''
-
-        if os.getenv('TK_DEBUG') or os.getenv('USER') == 'w10296':
-            print("----------------------DEBUG-------------------------")
-            _host = host.ftpHost(
-                "10.0.20.38",
-                "west_rnd",
-                "rnd2022!"
-            )
-        else:
-            _host = host.ftpHost(
-                "220.127.148.3",
-                "west_rnd",
-                "rnd2022!"
-            )
-
         path = sgtk.util.ShotgunPath.normalize(_session_path())
 
         # ensure the session is saved
         _save_session(path)
-
-        if sys.platform != "linux2":
-            source_path = path.replace("\\", "/")
-
-            target_path = source_path.replace("C:", "")
-            target_path_split = target_path.split("/")
-            
-            target_path_split.insert(-9, "to_west")
-            
-            target_path = "/".join(target_path_split)
-
-        else:
-            source_path = path
-
-            target_path = source_path.split("/")
-
-            target_path_split.insert(-9, "to_west")
-
-            target_path = "/".join(target_path_split)
-
-        log_data = list()
-        log_data.append("=================================================")
-        log_data.append(datetime.today().strftime("%Y/%m/%d %H:%M:%S\n"))
-
-        try:
-            print(source_path, "->", target_path)
-            _host._upload(source_path,target_path)
-
-            
-            _host.close()
-            print('---------------Ftp server close---------------')
-
-        except ftputil.ftp_error.FTPIOError as e:
-            print("---------------Create directory--------------")
-            target_dir = os.path.dirname(target_path)
-            print("path : %s", target_dir)
-            _host.makedirs(target_dir)
-
-            log_data.append('Create directory to save nuke file')
-
-            print(source_path, "->", target_path)
-            _host._upload(source_path, target_path)
-        
-            _host.close()
-            print('---------------Ftp server close---------------')
-
-        log_data.append('{0} to {1} upload file.'.format(source_path, target_path))
-        log_data.append("=================================================")
-        _host._ftp_log(log_data)
 
         # update the item with the saved session path
         item.properties["path"] = path
@@ -390,7 +321,88 @@ class NukeSessionPublishPlugin(HookBaseClass):
         # let the base class register the publish
         super(NukeSessionPublishPlugin, self).publish(settings, item)
 
-        self.update_last_publishfile_tag(item)
+        if os.getenv("WW_LOCATION") == 'vietnam':
+            import sys
+
+            current_file = os.path.abspath(__file__)
+            current_dir = os.path.dirname(current_file)
+            cleanup_current_dir_split = current_dir.split(os.sep)
+            del cleanup_current_dir_split[-1]
+
+            cleanup_current_dir_split.append('ftp_action')
+            cleanup_current_dir_path = os.sep.join(cleanup_current_dir_split)
+
+            sys.path.append(cleanup_current_dir_path)
+
+            from ftputil import ftputil
+            import host
+
+            _host = None
+            source_path = ''
+            target_path = ''
+
+            if os.getenv('TK_DEBUG') or os.getenv('USER') == 'w10296':
+                print("----------------------DEBUG-------------------------")
+                _host = host.ftpHost(
+                    "10.0.20.38",
+                    "west_rnd",
+                    "rnd2022!"
+                )
+            else:
+                _host = host.ftpHost(
+                    "220.127.148.3",
+                    "west_rnd",
+                    "rnd2022!"
+                )
+
+            if sys.platform != "linux2":
+                source_path = path.replace("\\", "/")
+
+                target_path = source_path.replace("C:", "")
+                target_path_split = target_path.split("/")
+                
+                target_path_split.insert(-9, "to_west")
+                
+                target_path = "/".join(target_path_split)
+
+            else:
+                source_path = path
+
+                target_path = source_path.split("/")
+
+                target_path_split.insert(-9, "to_west")
+
+                target_path = "/".join(target_path_split)
+
+            log_data = list()
+            log_data.append("=================================================")
+            log_data.append(datetime.today().strftime("%Y/%m/%d %H:%M:%S\n"))
+
+            try:
+                print(source_path, "->", target_path)
+                _host._upload(source_path,target_path)
+
+                _host.close()
+                print('---------------Ftp server close---------------')
+            except ftputil.ftp_error.FTPIOError as e:
+                print("---------------Create directory--------------")
+                target_dir = os.path.dirname(target_path)
+                print("path : %s", target_dir)
+                _host.makedirs(target_dir)
+
+                log_data.append('Create directory to save nuke file')
+
+                print(source_path, "->", target_path)
+                _host._upload(source_path, target_path)
+            
+                _host.close()
+                print('---------------Ftp server close---------------')
+
+            log_data.append('{0} to {1} upload file.'.format(source_path, target_path))
+            log_data.append("=================================================")
+            _host._ftp_log(log_data)
+
+            self.update_last_publishfile_tag(item)
 
     def finalize(self, settings, item):
         """
