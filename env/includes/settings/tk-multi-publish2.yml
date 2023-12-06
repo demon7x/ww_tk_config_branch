@@ -235,13 +235,9 @@ settings.tk-multi-publish2.nuke.asset_step:
     hook: "{engine}/tk-multi-publish2/basic/nuke_start_version_control.py"
     settings: {}
   - name: Publish to ShotGrid
-    hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/nuke_publish_script.py"
-    settings:
-        Publish Template: nuke_asset_publish
-  - name: (To west) Publish to Shotgun
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/nuke/basic/nuke_publish_script.py"
     settings:
-        Publish Template: nuke_asset_publish_to_west
+        Publish Template: nuke_asset_publish
   - name: Submit for Review
     hook: "{engine}/tk-multi-publish2/basic/submit_for_review.py"
     settings: {}
@@ -264,13 +260,9 @@ settings.tk-multi-publish2.nuke.shot_step:
     hook: "{engine}/tk-multi-publish2/basic/nuke_start_version_control.py"
     settings: {}
   - name: Publish to ShotGrid
-    hook: "{self}/publish_file.py:{engine}/tk-multi-publish2/basic/nuke_publish_script.py"
-    settings:
-        Publish Template: nuke_shot_publish
-  - name: (To west) Publish to Shotgun
     hook: "{self}/publish_file.py:{config}/tk-multi-publish2/nuke/basic/nuke_publish_script.py"
     settings:
-        Publish Template: nuke_shot_publish_to_west
+        Publish Template: nuke_shot_publish
   - name: Submit for Review
     hook: "{engine}/tk-multi-publish2/basic/submit_for_review.py"
     settings: {}
