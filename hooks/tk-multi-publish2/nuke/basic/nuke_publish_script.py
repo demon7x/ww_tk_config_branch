@@ -310,18 +310,10 @@ class NukeSessionPublishPlugin(HookBaseClass):
         # ensure the session is saved
         _save_session(path)
 
-        # update the item with the saved session path
-        item.properties["path"] = path
-
-        # add dependencies for the base class to register when publishing
-        item.properties[
-            "publish_dependencies"
-        ] = _nuke_find_additional_script_dependencies()
-
-        # let the base class register the publish
-        super(NukeSessionPublishPlugin, self).publish(settings, item)
-
+        # search the 'WW_LOCATION' env
         if os.getenv("WW_LOCATION") == 'vietnam':
+        
+            # ftputil module path append
             import sys
 
             current_file = os.path.abspath(__file__)
@@ -341,6 +333,7 @@ class NukeSessionPublishPlugin(HookBaseClass):
             source_path = ''
             target_path = ''
 
+            # hosting ftp server
             if os.getenv('TK_DEBUG') or os.getenv('USER') == 'w10296':
                 print("----------------------DEBUG-------------------------")
                 _host = host.ftpHost(
@@ -355,25 +348,30 @@ class NukeSessionPublishPlugin(HookBaseClass):
                     "rnd2022!"
                 )
 
-            if sys.platform != "linux2":
+            # ftp upload action and logging
+            if not sys.platform in ["linux2", "linux"]:
                 source_path = path.replace("\\", "/")
 
                 target_path = source_path.replace("C:", "")
                 target_path_split = target_path.split("/")
                 
-                target_path_split.insert(-9, "to_west")
+                del target_path_split[-3]
+                target_path_split.insert(-2, "pub")
+                target_path_split.insert(-9, "shotgrid_pub")
                 
                 target_path = "/".join(target_path_split)
 
             else:
                 source_path = path
 
-                target_path = source_path.split("/")
+                target_path_split = source_path.split("/")
 
-                target_path_split.insert(-9, "to_west")
+                del target_path_split[-3]
+                target_path_split.insert(-2, "pub")
+                target_path_split.insert(-9, "shotgrid_pub")
 
                 target_path = "/".join(target_path_split)
-
+                
             log_data = list()
             log_data.append("=================================================")
             log_data.append(datetime.today().strftime("%Y/%m/%d %H:%M:%S\n"))
@@ -384,6 +382,7 @@ class NukeSessionPublishPlugin(HookBaseClass):
 
                 _host.close()
                 print('---------------Ftp server close---------------')
+
             except ftputil.ftp_error.FTPIOError as e:
                 print("---------------Create directory--------------")
                 target_dir = os.path.dirname(target_path)
@@ -401,7 +400,20 @@ class NukeSessionPublishPlugin(HookBaseClass):
             log_data.append('{0} to {1} upload file.'.format(source_path, target_path))
             log_data.append("=================================================")
             _host._ftp_log(log_data)
+            
+        # update the item with the saved session path
+        item.properties["path"] = path
 
+        # add dependencies for the base class to register when publishing
+        item.properties[
+            "publish_dependencies"
+        ] = _nuke_find_additional_script_dependencies()
+
+        # let the base class register the publish
+        super(NukeSessionPublishPlugin, self).publish(settings, item)
+
+        # update 'tag' field
+        if os.getenv("WW_LOCATION") == 'vietnam': 
             self.update_last_publishfile_tag(item)
 
     def finalize(self, settings, item):
