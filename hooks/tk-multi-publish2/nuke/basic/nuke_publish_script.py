@@ -319,7 +319,8 @@ class NukeSessionPublishPlugin(HookBaseClass):
             current_file = os.path.abspath(__file__)
             current_dir = os.path.dirname(current_file)
             cleanup_current_dir_split = current_dir.split(os.sep)
-            del cleanup_current_dir_split[-1]
+            for i in range(2):
+                del cleanup_current_dir_split[-1]
 
             cleanup_current_dir_split.append('ftp_action')
             cleanup_current_dir_path = os.sep.join(cleanup_current_dir_split)
