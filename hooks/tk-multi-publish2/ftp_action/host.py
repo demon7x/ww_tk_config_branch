@@ -28,7 +28,7 @@ class ftpHost(ftputil.FTPHost):
         log_dir = os.path.join(root_dir, '.log')
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
-        file_name = datetime.today().strftime("%Y%m%d") + '_nuke_ftp_pub' + '.log'
+        file_name = datetime.today().strftime("%Y%m%d") + '_ftp' + '.log'
         log_file_path = os.path.join(log_dir, file_name)
         with open(log_file_path, 'a') as file:
             for log in item:
