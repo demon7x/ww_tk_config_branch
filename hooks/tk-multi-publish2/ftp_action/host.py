@@ -15,29 +15,43 @@ class ftpHost(ftputil.FTPHost):
         except ftputil.ftp_error.FTPOSError:
             print("westworld ftp server connection failed!!!")
             
-        self._set_root()
-        self._check_log_folder()
-
-    def _check_log_folder(self):
-        self.__log_path = self._root + "log"
-        if not self.path.exists(self.__log_path):
-            self.makedirs(self.__log_path)
-
+        # self._set_root()
+        # self._check_log_folder()
+    
     def _ftp_log(self, item):
-        root_dir = os.path.expanduser('~')
-        log_dir = os.path.join(root_dir, '.log')
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
-        file_name = datetime.today().strftime("%Y%m%d") + '_nuke_ftp_pub' + '.log'
-        log_file_path = os.path.join(log_dir, file_name)
+        root = os.path.expanduser('~')
+        log_dir_path = os.path.join(root, '.log')
+
+        if not os.path.exists(log_dir_path):
+            os.makedirs(log_dir_path)
+
+        file_name = datetime.today().strftime("%Y%m%d") + '_ftp' + '.log'
+        log_file_path = os.path.join(log_dir_path, file_name)
+
         with open(log_file_path, 'a') as file:
             for log in item:
                 file.write(str(log) + '\n')
+
+    # def _check_log_folder(self):
+    #     self.__log_path = self._root + "log"
+    #     if not self.path.exists(self.__log_path):
+    #         self.makedirs(self.__log_path)
+
+    # def _ftp_log(self, item):
+    #     root_dir = os.path.expanduser('~')
+    #     log_dir = os.path.join(root_dir, '.log')
+    #     if not os.path.exists(log_dir):
+    #         os.makedirs(log_dir)
+    #     file_name = datetime.today().strftime("%Y%m%d") + '_ftp' + '.log'
+    #     log_file_path = os.path.join(log_dir, file_name)
+    #     with open(log_file_path, 'a') as file:
+    #         for log in item:
+    #             file.write(str(log) + '\n')
         
-        self.upload(log_file_path, os.path.join(self.__log_path, file_name), mode='b')
+    #     self.upload(log_file_path, os.path.join(self.__log_path, file_name), mode='b')
     
-    def _set_root(self):
-        self._root = self.getcwd()
+    # def _set_root(self):
+    #     self._root = self.getcwd()
 
     def _upload(self, src, dest):
         self.upload(src,dest,mode='b')

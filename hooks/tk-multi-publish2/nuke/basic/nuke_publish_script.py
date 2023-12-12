@@ -369,9 +369,6 @@ class NukeSessionPublishPlugin(HookBaseClass):
                 print(source_path, "->", target_path)
                 _host._upload(source_path,target_path)
 
-                _host.close()
-                print('---------------Ftp server close---------------')
-
             except ftputil.ftp_error.FTPIOError as e:
                 print("---------------Create directory--------------")
                 target_dir = os.path.dirname(target_path)
@@ -383,13 +380,12 @@ class NukeSessionPublishPlugin(HookBaseClass):
                 print(source_path, "->", target_path)
                 _host._upload(source_path, target_path)
             
-                _host.close()
-                print('---------------Ftp server close---------------')
-
             log_data.append('{0} to {1} upload file.'.format(source_path, target_path))
             log_data.append("=================================================")
             _host._ftp_log(log_data)
             
+            _host.close()
+            print('---------------Ftp server close---------------')
         # update the item with the saved session path
         item.properties["path"] = path
 
