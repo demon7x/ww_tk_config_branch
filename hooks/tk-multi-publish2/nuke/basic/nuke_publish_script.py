@@ -316,16 +316,14 @@ class NukeSessionPublishPlugin(HookBaseClass):
             # ftputil module path append
             import sys
 
-            current_file = os.path.abspath(__file__)
-            current_dir = os.path.dirname(current_file)
-            cleanup_current_dir_split = current_dir.split(os.sep)
-            for i in range(2):
-                del cleanup_current_dir_split[-1]
+            current_path = os.path.abspath(__file__)
 
-            cleanup_current_dir_split.append('ftp_action')
-            cleanup_current_dir_path = os.sep.join(cleanup_current_dir_split)
+            for i in range(3):
+                current_path = os.path.dirname(current_path)
+            
+            ftp_action_path = os.path.join(current_path, 'ftp_action')
 
-            sys.path.append(cleanup_current_dir_path)
+            sys.path.append(ftp_action_path)
 
             from ftputil import ftputil
             import host
@@ -354,24 +352,14 @@ class NukeSessionPublishPlugin(HookBaseClass):
                 source_path = path.replace("\\", "/")
 
                 target_path = source_path.replace("C:", "")
-                target_path_split = target_path.split("/")
+                target_path = target_path.replace("show", "shotgrid_pub/show")
+                target_path = target_path.replace("dev","pub")
                 
-                del target_path_split[-3]
-                target_path_split.insert(-2, "pub")
-                target_path_split.insert(-9, "shotgrid_pub")
-                
-                target_path = "/".join(target_path_split)
-
             else:
                 source_path = path
 
-                target_path_split = source_path.split("/")
-
-                del target_path_split[-3]
-                target_path_split.insert(-2, "pub")
-                target_path_split.insert(-9, "shotgrid_pub")
-
-                target_path = "/".join(target_path_split)
+                target_path = source_path.replace("show", "shotgrid_pub/show")
+                target_path = target_path.replace("dev","pub")
                 
             log_data = list()
             log_data.append("=================================================")
@@ -432,7 +420,8 @@ class NukeSessionPublishPlugin(HookBaseClass):
         super(NukeSessionPublishPlugin, self).finalize(settings, item)
 
         # bump the session file to the next version
-        self._save_to_next_version(item.properties["path"], item, _save_session)
+        if os.getenv('WW_LOCATION') != 'vietnam':
+            self._save_to_next_version(item.properties["path"], item, _save_session)
     
     def update_last_publishfile_tag(self, item):
         current_context = self.parent.context
@@ -440,22 +429,29 @@ class NukeSessionPublishPlugin(HookBaseClass):
         sg_filters = [
             ["project", "is", current_context.project],
             ["entity", "is", current_context.entity],
-            ["task", "is", current_context.task]
+            ["task", "is", current_context.task],
+            ["created_by", "is", current_context.user]
         ]
 
-        sg_fields = ['id', "created_at", "tags"]
+        sg_fields = ['id', 'created_at', 'tags', 'path']
 
-        find_published_files = self.parent.shotgun.find("PublishedFile", sg_filters, sg_fields, order=[{'field_name':'created_at','direction':'desc'}])
+        find_published_files = self.parent.shotgun.find("PublishedFile", sg_filters, sg_fields, 
+                                                        order=[{'field_name':'created_at','direction':'desc'}])
 
         if find_published_files:
             last_published_file = find_published_files[0]
+
+            last_publish_file_ext = last_published_file['path']['local_path']
+            last_publish_file_ext = os.path.splitext(last_publish_file_ext)[1]
 
             tag_info = self.parent.shotgun.find_one("Tag", [["name", "is", "ww_vietnam"]])
             if not tag_info:
                 tag_info = self.parent.shotgun.create("Tag", {"name", "ww_vietnam"})
 
-            if tag_info:
+            if tag_info and last_publish_file_ext == '.nk':
                 self.parent.shotgun.update("PublishedFile", last_published_file['id'], {"tags": [tag_info]})
+            elif last_publish_file_ext != '.nk':
+                print("last publish file is not '.nk'.")
 
 
 def _nuke_find_additional_script_dependencies():
