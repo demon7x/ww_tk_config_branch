@@ -591,8 +591,11 @@ class MayaSessionUSDPublishPlugin(HookBaseClass):
             content = farm_content + content
 
             py_content_path = os.path.join(usd_ver_py_path, basename + '.py')
-
-            sys.path.append('\\\\10.0.40.42\\inhouse\\tool\\rez-packages\\tractor\\2.2.0\\platform-linux\\arch-x86_64\\lib\\python3.6\\site-packages')
+            
+            if sys.version_info.major == 3:
+                sys.path.append('\\\\10.0.40.42\\inhouse\\tool\\rez-packages\\tractor\\2.2.0\\platform-linux\\arch-x86_64\\lib\\python3.6\\site-packages')
+            else:
+                sys.path.append('\\\\10.0.40.42\\inhouse\\tool\\rez-packages\\tractor\\2.2.0\\platform-linux\\arch-x86_64\\lib\\python2.7\\site-packages')
             import tractor.api.author as author
 
             with open( py_content_path, 'w' ) as f:
