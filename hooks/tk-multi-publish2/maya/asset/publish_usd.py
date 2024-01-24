@@ -616,6 +616,9 @@ class MayaSessionUSDPublishPlugin(HookBaseClass):
             project_info = item.context.project
             maya_major = '{0}.{1}'.format(cmds.about(v=1), os.environ['REZ_MAYA_PATCH_VERSION'])
 
+            if os.environ['REZ_MAYA_PATCH_VERSION'] == '0':
+                maya_major.replace('.{}'.format(os.environ['REZ_MAYA_PATCH_VERSION']), '')
+
             sg = engine.shotgun
 
             filters = [
