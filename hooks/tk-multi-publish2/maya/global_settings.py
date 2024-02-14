@@ -281,7 +281,7 @@ class BasicFilePublishPlugin(HookBaseClass):
         sframe          = settings['sframe'     ].value
         eframe          = settings['eframe'     ].value
         assembled_usd   = settings['usd_path'   ].value + os.sep + basename + '.usd'
-        if item.context.task == 'mm':
+        if pipeline_step == 'mm':
             mmCam_usd       = settings['usd_ver_path' ].value + os.sep + 'mmCam.usd'
             mmGeom_usd      = settings['usd_ver_path' ].value + os.sep + 'mmGeom.usd'
             mmCam_abc       = settings['abc_ver_path' ].value + os.sep + 'mmCam.abc'
@@ -299,8 +299,8 @@ class BasicFilePublishPlugin(HookBaseClass):
         
         note_content = note_content_body(
             proj, pipeline_step, basename, sframe, eframe, 
-            assembled_usd, mmCam_usd, usd_asset_list,
-            mmCam_abc, abc_asset_list
+            assembled_usd, mmCam_usd, mmGeom_usd, usd_asset_list,
+            mmCam_abc, mmGeom_abc, abc_asset_list
         )
        
 
@@ -361,7 +361,7 @@ class BasicFilePublishPlugin(HookBaseClass):
                     'user' : item.context.user,
         }
 
-        if os.getenv('USER') != 'w10137':
+        if os.getenv('USER') not in ['w10137', 'w10296']:
             note['addressings_to'] =  assignees
         note_result = sg.create( 'Note' ,  note )
         print( '_' * 50 )                
@@ -580,8 +580,8 @@ class NamedLineEdit( QtGui.QWidget ):
 
 def note_content_body( 
             proj, pipeline_step, basename, sframe, eframe, 
-            assembled_usd, mmCam_usd, usd_asset_list,
-            mmCam_abc, abc_asset_list
+            assembled_usd, mmCam_usd, mmGeom_usd, usd_asset_list,
+            mmCam_abc, mmGeom_abc, abc_asset_list
             ):
     content = f'[{proj}] {pipeline_step} Publish\n\n'
     content += f'1.note\n'
@@ -590,22 +590,27 @@ def note_content_body(
     content += f'  {sframe} - {eframe}\n'
     content += f'3.Cache path\n\n'
     content += " ```\n"
-    if mmCam_usd or usd_asset_list:
+    if mmCam_usd or mmGeom_usd or usd_asset_list:
         content += '=========================='
-        if mmCam_usd:
-            content += f'{mmCam_usd}\n'
         if assembled_usd:
             content += 'Assmebled USD path:\n'
             content += f'{assembled_usd}\n\n'
+        if mmCam_usd:
+            content += f'{mmCam_usd}\n'        
+        if mmGeom_usd:
+            content += f'{mmGeom_usd}\n'
 
         for _usd_asset in usd_asset_list:
             content += _usd_asset + '\n'
 
-    if mmCam_abc or abc_asset_list:
+    if mmCam_abc or mmGeom_abc or abc_asset_list:
         content += '\n=========================='
         content += 'ABC Cache path:\n'
         if mmCam_abc:
             content += f'{mmCam_abc}\n'
+        if mmGeom_abc:
+            content += f'{mmGeom_abc}\n'
+
         for _abc_asset in abc_asset_list:
             content += _abc_asset + '\n'
     content += " ```\n"
