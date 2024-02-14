@@ -279,6 +279,9 @@ class MayaSessionShotDummyAlembicExportPlugin(HookBaseClass):
         scene_path = global_settings['scene_path'].value
         basename   = global_settings['basename'].value
 
+        script_name = os.path.basename( os.path.abspath(__file__) )
+        script_name = os.path.splitext( script_name )[0]
+
         abc_ver_path = global_settings['abc_ver_path'].value
         abc_ver_py_folder = os.path.join( abc_ver_path , 'python' )    
 
@@ -332,7 +335,7 @@ class MayaSessionShotDummyAlembicExportPlugin(HookBaseClass):
             farm_content += 'cmds.file( "{}", o = 1 )\n'.format( scene_path )
 
             content = farm_content + content
-            py_content_path = os.path.join( abc_ver_path ,'python',  basename + '.py' )
+            py_content_path = os.path.join( abc_ver_path ,'python',  '{0}_{1}.py'.format( script_name, basename ) )
 
             if not os.path.exists( os.path.dirname( py_content_path ) ):
                 os.makedirs( os.path.dirname( py_content_path ), exist_ok = True )
@@ -346,7 +349,7 @@ class MayaSessionShotDummyAlembicExportPlugin(HookBaseClass):
             job = author.Job()
 
             job.service = 'cfx|cfx2' 
-            job.title = '[{}] Exporting mmGeom Alembic'.format( basename )
+            job.title = '[{0}_{1}] Exporting mmGeom Alembic'.format( script_name, basename )
             job.priority = 100
             job.projects = ['RND']
             job.spoolcwd = '/tmp'
@@ -366,7 +369,7 @@ class MayaSessionShotDummyAlembicExportPlugin(HookBaseClass):
             print( '\n' )
             exec( content )
 
-        item['asset_path'] = mmGeom_abc_path
+        item.properties['publish_path'] = mmGeom_abc_path
         return super(MayaSessionShotDummyAlembicExportPlugin, self).publish( settings, item )
 
     def create_settings_widget( self , parent ):

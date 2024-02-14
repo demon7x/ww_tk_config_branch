@@ -333,6 +333,9 @@ class MayaSessionShotComponentUSDPublishPlugin(HookBaseClass):
         info_ver_path = os.path.join( info_path, ver )
         pub_path = scene_path.replace( os.sep + 'dev' + os.sep , os.sep + 'pub' + os.sep )
 
+        script_name = os.path.basename( os.path.abspath(__file__) )
+        script_name = os.path.splitext( script_name )[0]        
+
         if not os.path.exists( usd_ver_path ):
             os.makedirs( usd_ver_path )
             os.chmod( usd_ver_path , 0o0777 )
@@ -436,7 +439,7 @@ class MayaSessionShotComponentUSDPublishPlugin(HookBaseClass):
             farm_content += 'cmds.file( "{}", o = 1 )\n'.format( scene_path )
 
             content = farm_content + content
-            py_content_path = os.path.join( usd_ver_path ,'python',  basename + '.py' )
+            py_content_path = os.path.join( usd_ver_path ,'python',  '{0}_{1}.py'.format( script_name, basename ) )
 
             sys.path.append( '/westworld/inhouse/tool/rez-packages/tractor/2.2.0/platform-linux/arch-x86_64/lib/python3.6/site-packages' )
             import tractor.api.author as author
@@ -448,7 +451,7 @@ class MayaSessionShotComponentUSDPublishPlugin(HookBaseClass):
             job = author.Job()
 
             job.service = 'cfx|cfx2' 
-            job.title = '[{}] Exporting USD '.format( basename )
+            job.title = '[{0}_{1}] Exporting USD '.format( script_name, basename )
             #job.title = '[{}] Exporting USD '.format(   os.path.basename( item.parent.parent.name ) )
             job.priority = 100
             job.projects = [ item.context.project['name'] ]  

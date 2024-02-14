@@ -306,6 +306,8 @@ class MayaSessionShotDummyUSDExportPlugin(HookBaseClass):
             os.chmod( usd_ver_path, 0o0777 )
             os.chmod( usd_ver_py_folder, 0o0777 )
 
+        script_name = os.path.basename( os.path.abspath(__file__) )
+        script_name = os.path.splitext( script_name )[0]        
 
         # local usd export
         content = ''
@@ -353,7 +355,7 @@ class MayaSessionShotDummyUSDExportPlugin(HookBaseClass):
             farm_content += 'cmds.file( "{}", o = 1 )\n'.format( scene_path )
 
             content = farm_content + content
-            py_content_path = os.path.join( usd_ver_path ,'python',  basename + '.py' )
+            py_content_path = os.path.join( usd_ver_path ,'python',  '{0}_{1}.py'.format( script_name, basename ) )
 
             if not os.path.exists( os.path.dirname( py_content_path ) ):
                 os.makedirs( os.path.dirname( py_content_path ), exist_ok = True )
@@ -367,7 +369,7 @@ class MayaSessionShotDummyUSDExportPlugin(HookBaseClass):
             job = author.Job()
 
             job.service = 'cfx|cfx2' 
-            job.title = '[{}] Exporting Dummy USD '.format( basename )
+            job.title = '[{0}_{1}] Exporting Dummy USD '.format( script_name, basename )
             job.priority = 100
             job.projects = ['RND']
             job.spoolcwd = '/tmp'
@@ -382,7 +384,7 @@ class MayaSessionShotDummyUSDExportPlugin(HookBaseClass):
         else:
             exec( content )
 
-        item['asset_path'] = mmGeom_usd_path
+        item.properties['publish_path'] = mmGeom_usd_path
         return super(MayaSessionShotDummyUSDExportPlugin, self).publish(settings, item)
 
     def create_settings_widget( self , parent ):
