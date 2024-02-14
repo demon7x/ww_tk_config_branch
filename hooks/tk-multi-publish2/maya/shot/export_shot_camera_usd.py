@@ -342,7 +342,8 @@ class MayaSessionShotCameraUSDExportPlugin(HookBaseClass):
 
         assemble_path = os.path.join( usd_path, basename + '.usd'  )
 
-
+        script_name = os.path.basename( os.path.abspath(__file__) )
+        script_name = os.path.splitext( script_name )[0]
 
 
         cam_list = []
@@ -394,6 +395,8 @@ class MayaSessionShotCameraUSDExportPlugin(HookBaseClass):
         step   = global_settings['cache_step'].value
         farm   = global_settings['farm'].value
 
+        cam_usd_path = ''
+
         if cam_list:
             cam_type = ['mmCam', 'renderCam' ]
             for cam in cam_list:
@@ -416,7 +419,7 @@ class MayaSessionShotCameraUSDExportPlugin(HookBaseClass):
             farm_content += 'cmds.file( "{}", o = 1 )\n'.format( scene_path )
 
             content = farm_content + content
-            py_content_path = os.path.join( usd_ver_path ,'python',  basename + '.py' )
+            py_content_path = os.path.join( usd_ver_path ,'python',  '{0}_{1}.py'.format( script_name, basename ) )
 
             if not os.path.exists( os.path.dirname( py_content_path ) ):
                 os.makedirs( os.path.dirname( py_content_path ), exist_ok = True )
@@ -430,7 +433,7 @@ class MayaSessionShotCameraUSDExportPlugin(HookBaseClass):
             job = author.Job()
 
             job.service = 'cfx|cfx2' 
-            job.title = '[{}] Exporting Camera USD '.format( basename )
+            job.title = '[{0}_{1}] Exporting Camera USD '.format( script_name, basename )
             job.priority = 100
             job.projects = ['RND']
             job.spoolcwd = '/tmp'
@@ -451,6 +454,7 @@ class MayaSessionShotCameraUSDExportPlugin(HookBaseClass):
 #            settings['shotgun_publish'] = True
 #        else:
 #            settings['shotgun_publish'] = False
+        item.properties['publish_path'] = cam_usd_path
         return super(MayaSessionShotCameraUSDExportPlugin, self).publish(settings, item)
 
     def create_settings_widget( self , parent ):
