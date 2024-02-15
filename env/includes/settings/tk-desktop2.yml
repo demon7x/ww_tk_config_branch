@@ -16,6 +16,7 @@ includes:
 - ../engine_locations.yml
 - ./tk-multi-launchapp.yml
 - ./tk-multi-publish2.yml
+- ./tk-download.yml
 
 ################################################################################
 
@@ -23,6 +24,7 @@ includes:
 settings.tk-desktop2.site:
   apps:
   location: "@engines.tk-desktop2.location"
+
 
 
 # project
@@ -33,4 +35,6 @@ settings.tk-desktop2.all:
     tk-multi-launchmari: "@settings.tk-multi-launchapp.mari"
     tk-multi-launchmotionbuilder: "@settings.tk-multi-launchapp.motionbuilder"
     tk-multi-publish2: "@settings.tk-multi-publish2.standalone"
+    tk-download: "@settings.tk-download.standalone"
   location: "@engines.tk-desktop2.location"
+
