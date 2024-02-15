@@ -22,4 +22,4 @@ settings.tk-download.standalone:
     #name: tk-download
     type: git
     path: https://github.com/onetera/tk-download.git
-    version: v1.0.0
+    version: v1.0.1
