@@ -333,19 +333,28 @@ class NukeSessionPublishPlugin(HookBaseClass):
             target_path = ''
 
             # hosting ftp server
-            if os.getenv('TK_DEBUG') or os.getenv('USER') == 'w10296':
-                print("----------------------DEBUG-------------------------")
-                _host = host.ftpHost(
-                    "10.0.20.38",
-                    "west_rnd",
-                    "rnd2022!"
-                )
+            if os.getenv("WW_LOCATION") == 'vietnam':
+                ftp_ip = "220.127.148.3"
             else:
-                _host = host.ftpHost(
-                    "220.127.148.3",
-                    "west_rnd",
-                    "rnd2022!"
-                )
+                ftp_ip = '10.0.20.38'
+
+            _host = host.ftpHost(
+                ftp_ip,
+                "west_rnd",
+                "rnd2022!"
+            # if os.getenv('TK_DEBUG') or os.getenv('USER') == 'w10296':
+            #     print("----------------------DEBUG-------------------------")
+            #     _host = host.ftpHost(
+            #         "10.0.20.38",
+            #         "west_rnd",
+            #         "rnd2022!"
+            #     )
+            # else:
+            #     _host = host.ftpHost(
+            #         "220.127.148.3",
+            #         "west_rnd",
+            #         "rnd2022!"
+            #     )
 
             # ftp upload action and logging
             if not sys.platform in ["linux2", "linux"]:
