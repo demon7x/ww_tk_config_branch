@@ -342,6 +342,7 @@ class NukeSessionPublishPlugin(HookBaseClass):
                 ftp_ip,
                 "west_rnd",
                 "rnd2022!"
+            )
             # if os.getenv('TK_DEBUG') or os.getenv('USER') == 'w10296':
             #     print("----------------------DEBUG-------------------------")
             #     _host = host.ftpHost(
