@@ -422,7 +422,7 @@ class NukeSessionPublishPlugin(HookBaseClass):
         for node, org_path in  org_node:
             node['file'].setValue( org_path )
 
-        nuke.scriptSave()
+        #nuke.scriptSave()
 
         # update 'tag' field
         if os.getenv("WW_LOCATION") == 'vietnam': 
