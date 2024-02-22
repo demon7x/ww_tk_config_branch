@@ -312,6 +312,18 @@ class NukeSessionPublishPlugin(HookBaseClass):
 
         # search the 'WW_LOCATION' env
         if os.getenv("WW_LOCATION") == 'vietnam':
+
+            org_node = []
+            for node in nuke.allNodes():
+                if node.Class() in ['Read', 'Write' ]:
+                    org_node.append( [node, node['file'].value()] )
+                    if 'show' in node['file'].value():
+                        partition = node['file'].value().partition('show')
+                        new_path = '/show' + partition[2]
+                        new_path = new_path.replace( '\\', '/' )
+                        
+                        node['file'].setValue( new_path )
+            nuke.scriptSave()
         
             # ftputil module path append
             import sys
@@ -405,24 +417,13 @@ class NukeSessionPublishPlugin(HookBaseClass):
         ] = _nuke_find_additional_script_dependencies()
 
         # let the base class register the publish
-        org_node = []
-        for node in nuke.allNodes():
-            if node.Class() in ['Read', 'Write' ]:
-                org_node.append( [node, node['file'].value()] )
-                if 'show' in node['file'].value():
-                    partition = node['file'].value().partition('show')
-                    new_path = '/show' + partition[2]
-                    new_path = new_path.replace( '\\', '/' )
-                    
-                    node['file'].setValue( new_path )
-        nuke.scriptSave()
 
         super(NukeSessionPublishPlugin, self).publish(settings, item)
 
         for node, org_path in  org_node:
             node['file'].setValue( org_path )
 
-        #nuke.scriptSave()
+        nuke.scriptSave()
 
         # update 'tag' field
         if os.getenv("WW_LOCATION") == 'vietnam': 
