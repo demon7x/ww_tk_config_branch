@@ -250,9 +250,9 @@ settings.tk-multi-publish2.nuke.shot_step:
   collector_settings:
       Work Template: nuke_shot_work
   publish_plugins:
-  - name: Publish to ShotGrid
-    hook: "{self}/publish_file.py"
-    settings: {}
+  #- name: Publish to ShotGrid
+  #  hook: "{self}/publish_file.py"
+  #  settings: {}
   - name: Upload for review
     hook: "{self}/upload_version.py"
     settings: {}
