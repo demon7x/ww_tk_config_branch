@@ -312,6 +312,18 @@ class NukeSessionPublishPlugin(HookBaseClass):
 
         # search the 'WW_LOCATION' env
         if os.getenv("WW_LOCATION") == 'vietnam':
+
+            org_node = []
+            for node in nuke.allNodes():
+                if node.Class() in ['Read', 'Write' ]:
+                    org_node.append( [node, node['file'].value()] )
+                    if 'show' in node['file'].value():
+                        partition = node['file'].value().partition('show')
+                        new_path = '/show' + partition[2]
+                        new_path = new_path.replace( '\\', '/' )
+                        
+                        node['file'].setValue( new_path )
+            nuke.scriptSave()
         
             # ftputil module path append
             import sys
@@ -333,19 +345,29 @@ class NukeSessionPublishPlugin(HookBaseClass):
             target_path = ''
 
             # hosting ftp server
-            if os.getenv('TK_DEBUG') or os.getenv('USER') == 'w10296':
-                print("----------------------DEBUG-------------------------")
-                _host = host.ftpHost(
-                    "10.0.20.38",
-                    "west_rnd",
-                    "rnd2022!"
-                )
+            if os.getenv("WW_LOCATION") == 'vietnam':
+                ftp_ip = "220.127.148.3"
             else:
-                _host = host.ftpHost(
-                    "220.127.148.3",
-                    "west_rnd",
-                    "rnd2022!"
-                )
+                ftp_ip = '10.0.20.38'
+
+            _host = host.ftpHost(
+                ftp_ip,
+                "west_rnd",
+                "rnd2022!"
+            )
+            # if os.getenv('TK_DEBUG') or os.getenv('USER') == 'w10296':
+            #     print("----------------------DEBUG-------------------------")
+            #     _host = host.ftpHost(
+            #         "10.0.20.38",
+            #         "west_rnd",
+            #         "rnd2022!"
+            #     )
+            # else:
+            #     _host = host.ftpHost(
+            #         "220.127.148.3",
+            #         "west_rnd",
+            #         "rnd2022!"
+            #     )
 
             # ftp upload action and logging
             if not sys.platform in ["linux2", "linux"]:
@@ -395,7 +417,13 @@ class NukeSessionPublishPlugin(HookBaseClass):
         ] = _nuke_find_additional_script_dependencies()
 
         # let the base class register the publish
+
         super(NukeSessionPublishPlugin, self).publish(settings, item)
+
+        for node, org_path in  org_node:
+            node['file'].setValue( org_path )
+
+        nuke.scriptSave()
 
         # update 'tag' field
         if os.getenv("WW_LOCATION") == 'vietnam': 
