@@ -125,7 +125,7 @@ class EqActions(HookBaseClass):
         path = os.path.dirname(path)
         count = len(os.listdir(path))
         path = re.sub("v\d+",re.search("v\d+",path).group()+"_jpg",path)
-        pad = "#" * int(filter(str.isdigit,re.search("%\d+d",file_name).group()))
+        pad = "#" * int("".join(filter(str.isdigit,re.search("%\d+d",file_name).group())))
         file_name = re.sub("%\d+d",pad,file_name)
         file_name = file_name.replace(file_name.split(".")[-1],"jpg")
         path = os.path.join(path,file_name)
