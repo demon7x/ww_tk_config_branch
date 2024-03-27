@@ -154,3 +154,7 @@ apps.tk-multi-workfiles2.location:
   path: https://github.com/onetera/tk-multi-workfiles2.git
   version: v0.11.15
 
+apps.tk-desktop-timecard:
+  name: tk-desktop-timeacrd
+  type: git
+  path: https://github.com/onetera/tk-desktop-timecard.git

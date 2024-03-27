@@ -18,6 +18,7 @@ includes:
 - ./tk-multi-publish2.yml
 - ./tk-multi-screeningroom.yml
 - ./tk-download.yml
+- ./tk-desktop-timecard.yml
 
 ################################################################################
 
@@ -41,6 +42,7 @@ settings.tk-desktop.project:
     tk-multi-publish2: "@settings.tk-multi-publish2.standalone"
     tk-multi-screeningroom: "@settings.tk-multi-screeningroom.rv"
     tk-download: "@settings.tk-download.standalone"
+    tk-desktop-timecard: "@settings.tk-desktop-timecard.standalone"
   groups:
   - matches:
     - "*Fla*"
