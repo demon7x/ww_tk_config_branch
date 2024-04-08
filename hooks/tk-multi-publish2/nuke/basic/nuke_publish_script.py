@@ -420,8 +420,8 @@ class NukeSessionPublishPlugin(HookBaseClass):
 
         super(NukeSessionPublishPlugin, self).publish(settings, item)
 
-        for node, org_path in  org_node:
-            node['file'].setValue( org_path )
+#        for node, org_path in  org_node:
+#            node['file'].setValue( org_path )
 
         nuke.scriptSave()
 
