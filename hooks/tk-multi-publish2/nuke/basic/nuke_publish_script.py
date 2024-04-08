@@ -308,7 +308,7 @@ class NukeSessionPublishPlugin(HookBaseClass):
         path = sgtk.util.ShotgunPath.normalize(_session_path())
 
         # ensure the session is saved
-        _save_session(path)
+        #_save_session(path)
 
         # search the 'WW_LOCATION' env
         if os.getenv("WW_LOCATION") == 'vietnam':
@@ -444,8 +444,8 @@ class NukeSessionPublishPlugin(HookBaseClass):
         super(NukeSessionPublishPlugin, self).finalize(settings, item)
 
         # bump the session file to the next version
-        if os.getenv('WW_LOCATION') != 'vietnam':
-            self._save_to_next_version(item.properties["path"], item, _save_session)
+#        if os.getenv('WW_LOCATION') != 'vietnam':
+#            self._save_to_next_version(item.properties["path"], item, _save_session)
     
     def update_last_publishfile_tag(self, item):
         current_context = self.parent.context
