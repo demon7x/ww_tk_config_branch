@@ -349,7 +349,7 @@ class BasicFilePublishPlugin(HookBaseClass):
 
         for task in task_list:
             for step in to_step_list:
-                if task['step']['name'] == step:
+                if task['step'] and task['step']['name'] == step:
                     assignees += task['task_assignees']
 
 
