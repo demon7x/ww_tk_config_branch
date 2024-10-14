@@ -79,7 +79,7 @@ engines.tk-vred.location:
   name: tk-vred
   version: v2.1.5
 engines.tk-unreal.location:
-  version: v1.2.0
+  version: v1.3.1
   type: github_release
   organization: ue4plugins
   repository: tk-unreal
