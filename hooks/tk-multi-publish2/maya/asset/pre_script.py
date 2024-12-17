@@ -182,12 +182,12 @@ class MayaSessionPreScriptPublishPlugin(HookBaseClass):
                     
                 cmds.setAttr('%s.version'%sh, ver, type='string')
 
-        print( '+' * 50 )
-        print( '[ Shape Version ] ' , ver )
-        print( '--- item ----' )
-        print( item )
-        print( item.context.step['name'] ) 
-        print( '+' * 50 )
+            print( '+' * 50 )
+            print( '[ Shape Version ] ' , ver )
+            print( '---- item ----' )
+            print( item )
+            print( item.context.step['name'] ) 
+            print( '+' * 50 )
 
         return True
 
