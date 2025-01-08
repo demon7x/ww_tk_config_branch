@@ -37,6 +37,11 @@ apps.tk-multi-output.location:
   linux_path: /westworld/inhouse/tool/shotgun/application/tk-multi-output
   windows_path: \\10.0.40.42\inhouse\tool\shotgun\application\tk-multi-output
 
+apps.tk-multi-output2.location:
+  name: tk-multi-output2
+  type: dev
+  linux_path: /westworld/inhouse/tool/shotgun/application/tk-multi-output2
+  windows_path: \\10.0.40.42\inhouse\tool\shotgun\application\tk-multi-output2
 
 apps.tk-desktop-timecard.location:
   name: tk-desktop-timecard
