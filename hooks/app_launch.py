@@ -82,6 +82,9 @@ class AppLaunch(tank.Hook):
             rez_path = adapter.get_rez_module_root()
             if not rez_path:
                 raise EnvironmentError('rez is not installed and could not be automatically found. Cannot continue.')
+            
+            if sys.version_info.major == 3:
+                rez_path = rez_path.decode('utf-8')
 
             sys.path.append(rez_path)
         
@@ -100,7 +103,7 @@ class AppLaunch(tank.Hook):
 
 def get_rez_packages(sg,app_name,version,system,project):
     
-    if system == "linux2":
+    if "linux" in system:
         filter_dict = [['code','is',app_name.title()+" "+version],
                        ['projects','in',project]
                       ]
@@ -111,7 +114,8 @@ def get_rez_packages(sg,app_name,version,system,project):
             filter_dict = [['code','is',app_name.title()+" "+version],
                         ['projects','is',None] ]
             packages = sg.find("Software",filter_dict,['sg_rez'])
-            packages =  packages[0]['sg_rez']
+            if packages:
+                packages =  packages[0]['sg_rez']
 
     else:
         filter_dict = [['code','is',app_name.title()+" "+version],
@@ -124,7 +128,8 @@ def get_rez_packages(sg,app_name,version,system,project):
             filter_dict = [['code','is',app_name.title()+" "+version],
                         ['projects','is',None] ]
             packages = sg.find("Software",filter_dict,['sg_win_rez'])
-            packages =  packages[0]['sg_win_rez']
+            if packages:
+                packages =  packages[0]['sg_win_rez']
 
     if packages:
         packages = [ x for x in packages.split(",")] 
