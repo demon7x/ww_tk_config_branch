@@ -146,8 +146,12 @@ class BaseAdapter(object):
 
     @staticmethod
     def get_rez_root_command():
+        if sys.version_info.major == 2:
+            rez_cmd = 'rez-env rez-2.23.1 -- printenv REZ_REZ_ROOT'
+        else:
+            rez_cmd = 'rez-env rez-3.2.1 -- printenv REZ_REZ_ROOT'
 
-        return 'rez-env rez -- printenv REZ_REZ_ROOT'
+        return rez_cmd
 
     @classmethod
     def get_rez_module_root(cls):
@@ -208,8 +212,12 @@ class WindowsAdapter(BaseAdapter):
 
     @staticmethod
     def get_rez_root_command():
+        if sys.version_info.major == 2:
+            rez_cmd = 'rez-env rez-2.23.1 -- echo %REZ_REZ_ROOT%'
+        else:
+            rez_cmd = 'rez-env rez-3.2.1 -- echo %REZ_REZ_ROOT%'
 
-        return 'rez-env rez -- echo %REZ_REZ_ROOT%'
+        return rez_cmd
 
 
 
