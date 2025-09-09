@@ -39,14 +39,11 @@ settings.tk-desktop.project:
       location: "@apps.tk-multi-devutils.location"
     tk-multi-launchapp: "@settings.tk-multi-launchapp"
     tk-multi-launchhiero: "@settings.tk-multi-launchapp.hiero"
-    #tk-multi-launchmari: "@settings.tk-multi-launchapp.mari"
+    # tk-multi-launchmari: "@settings.tk-multi-launchapp.mari"
     tk-multi-launchmotionbuilder: "@settings.tk-multi-launchapp.motionbuilder"
     tk-multi-publish2: "@settings.tk-multi-publish2.standalone"
     tk-multi-screeningroom: "@settings.tk-multi-screeningroom.rv"
     tk-multi-demo: "@settings.tk-multi-demo.standalone"
-    #tk-download: "@settings.tk-download.standalone"
-    tk-multi-txmake: "@settings.tk-multi-txmake.standalone"
-    tk-multi-library: "@settings.tk-multi-library.standalone"
   groups:
   - matches:
     - "katana*"
