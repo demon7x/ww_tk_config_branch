@@ -20,8 +20,6 @@ includes:
 - ./tk-multi-shotgunpanel.yml
 - ./tk-multi-snapshot.yml
 - ./tk-multi-workfiles2.yml
-- ./tk-maya-makemov.yml
-- ./tk-multi-library.yml
 
 ################################################################################
 
@@ -68,7 +66,6 @@ settings.tk-maya.project:
     tk-multi-shotgunpanel: "@settings.tk-multi-shotgunpanel"
     tk-multi-workfiles2: "@settings.tk-multi-workfiles2.maya.project"
     tk-multi-loader2: "@settings.tk-multi-loader2.maya"
-    tk-multi-library: "@settings.tk-multi-library.maya"
   menu_favourites:
   - {app_instance: tk-multi-workfiles2, name: File Open...}
   - {app_instance: tk-multi-workfiles2, name: File Save...}
