@@ -24,9 +24,6 @@ includes:
 - ./includes/settings/tk-photoshopcc.yml
 - ./includes/settings/tk-shell.yml
 - ./includes/settings/tk-shotgun.yml
-- ./includes/settings/tk-katana.yml
-- ./includes/settings/tk-clarisse.yml
-- ./includes/settings/tk-unreal.yml
 
 ################################################################################
 # configuration for all engines to load in an asset step context
@@ -42,9 +39,6 @@ engines:
   tk-photoshopcc: "@settings.tk-photoshopcc.asset_step"
   tk-shell: "@settings.tk-shell.asset_step"
   tk-shotgun: "@settings.tk-shotgun.asset_step"
-  tk-katana: "@settings.tk-katana.asset_step"
-  tk-clarisse: "@settings.tk-clarisse.asset_step"
-  tk-unreal: "@settings.tk-unreal.asset_step"
 
 ################################################################################
 # reference all of the common frameworks

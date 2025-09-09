@@ -13,7 +13,7 @@
 
 includes:
 - ./frameworks.yml
-- ./ww_app_locations.yml
+# - ./ww_app_locations.yml
 
 ################################################################################
 # location descriptors for apps used in this configuration
@@ -99,10 +99,10 @@ apps.tk-multi-workfiles.location:
   version: v0.7.4
 
 # workfiles2
-#apps.tk-multi-workfiles2.location:
-#  type: app_store
-#  name: tk-multi-workfiles2
-#  version: v0.11.10
+apps.tk-multi-workfiles2.location:
+  type: app_store
+  name: tk-multi-workfiles2
+  version: v0.11.15
 
 # dev utils
 apps.tk-multi-devutils.location:
@@ -196,18 +196,18 @@ apps.tk-mari-projectmanager.location:
 
 
 
-apps.tk-iomanager.location: '@apps.tk-iomanager.location'
-apps.tk-maya-makemov.location: '@apps.tk-maya-makemov.location'
-apps.tk-multi-output.location: '@apps.tk-multi-output.location'
-apps.tk-multi-output2.location: '@apps.tk-multi-output2.location'
-apps.tk-multi-timelog.location: '@apps.tk-multi-timelog.location'
-apps.tk-desktop-timecard.location: '@apps.tk-desktop-timecard.location'
-apps.tk-multi-txmake.location: '@apps.tk-multi-txmake.location'
-apps.tk-multi-workfiles2.location: '@apps.tk-multi-workfiles2.location'
-apps.tk-multi-version.location: '@apps.tk-multi-version.location'
-apps.tk-multi-library.location: '@apps.tk-multi-library.location'
-apps.tk-desktop-stock.location: '@apps.tk-desktop-stock.location'
-apps.tk-multi-snapshot.location: '@apps.tk-multi-snapshot.location'
+# apps.tk-iomanager.location: '@apps.tk-iomanager.location'
+# apps.tk-maya-makemov.location: '@apps.tk-maya-makemov.location'
+# apps.tk-multi-output.location: '@apps.tk-multi-output.location'
+# apps.tk-multi-output2.location: '@apps.tk-multi-output2.location'
+# apps.tk-multi-timelog.location: '@apps.tk-multi-timelog.location'
+# apps.tk-desktop-timecard.location: '@apps.tk-desktop-timecard.location'
+# apps.tk-multi-txmake.location: '@apps.tk-multi-txmake.location'
+# apps.tk-multi-workfiles2.location: '@apps.tk-multi-workfiles2.location'
+# apps.tk-multi-version.location: '@apps.tk-multi-version.location'
+# apps.tk-multi-library.location: '@apps.tk-multi-library.location'
+# apps.tk-desktop-stock.location: '@apps.tk-desktop-stock.location'
+# apps.tk-multi-snapshot.location: '@apps.tk-multi-snapshot.location'
 ################################################################################
 # reference all of the common frameworks
 frameworks: '@frameworks'
