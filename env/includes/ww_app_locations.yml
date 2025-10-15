@@ -41,7 +41,6 @@ apps.tk-multi-version.location:
   linux_path: /westworld/inhouse/tool/shotgun/application/tk-multi-version
   windows_path: \\10.0.40.42\inhouse\tool\shotgun\application\tk-multi-version
 
-
 # snapshot
 apps.tk-multi-snapshot.location:
   name: tk-multi-snapshot
