@@ -18,5 +18,5 @@ includes:
 
 # ---- Stand alone publish
 
-settings.tk-desktop-timecard.standalone:
-  location: "@apps.tk-desktop-timecard.location"
+settings.tk-iomanager.standalone:
+  location: "@apps.tk-iomanager.location"
