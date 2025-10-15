@@ -17,7 +17,7 @@ includes:
 - ./tk-multi-launchapp.yml
 - ./tk-multi-publish2.yml
 - ./tk-multi-screeningroom.yml
-- ./tk-download.yml
+- ./tk-iomanager.yml
 - ./tk-desktop-timecard.yml
 
 ################################################################################
