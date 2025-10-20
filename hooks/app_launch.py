@@ -135,7 +135,10 @@ def get_rez_packages(sg,app_name,version,system,project):
         packages = [ x for x in packages.split(",")] 
     else:
         packages = None
-        
+    print(packages)
+    print(packages)
+    print(packages)
+    print(packages)
     return packages
 
 
