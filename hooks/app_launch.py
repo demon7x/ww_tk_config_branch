@@ -22,6 +22,13 @@ import platform
 import tank
 import sgtk
 
+# Qt GUI 사용
+try:
+    from sgtk.platform.qt import QtGui, QtCore
+    GUI_AVAILABLE = True
+except ImportError:
+    GUI_AVAILABLE = False
+
 #rez append 
 #sys.path.append("/westworld/inhouse/rez/lib/python2.7/site-packages/rez-2.23.1-py2.7.egg")
 
@@ -36,6 +43,98 @@ ENGINES = {
     'tk-clarisse' : 'clarisse',
     'tk-unreal' : 'unreal'
 }
+
+
+# 사용 가능한 플러그인 리스트
+AVAILABLE_PLUGINS = ['Silk', 'boris']
+
+def show_software_selector():
+    """
+    플러그인 선택 GUI를 표시하고 선택된 플러그인을 반환
+    
+    :returns: 선택된 플러그인 이름 리스트, 또는 None
+    """
+    if not GUI_AVAILABLE:
+        return None
+    
+    # 사용 가능한 플러그인 목록
+    software_dict = {plugin: plugin for plugin in AVAILABLE_PLUGINS}
+    
+    if not software_dict:
+        return None
+    
+    # QApplication이 없으면 생성
+    app = QtGui.QApplication.instance()
+    if app is None:
+        app = QtGui.QApplication(sys.argv)
+    
+    # 다이얼로그 클래스 정의
+    class SoftwareSelectorDialog(QtGui.QDialog):
+        def __init__(self, software_dict, parent=None):
+            super(SoftwareSelectorDialog, self).__init__(parent)
+            self.software_dict = software_dict
+            self.selected_items = []
+            self.init_ui()
+        
+        def init_ui(self):
+            self.setWindowTitle("추가 플러그인 선택")
+            self.setMinimumSize(400, 500)
+            
+            # 메인 레이아웃
+            main_layout = QtGui.QVBoxLayout(self)
+            
+            # 라벨
+            label = QtGui.QLabel("추가로 로드할 플러그인을 선택하세요:")
+            main_layout.addWidget(label)
+            
+            # 리스트 위젯 (다중 선택 가능)
+            self.list_widget = QtGui.QListWidget()
+            self.list_widget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
+            main_layout.addWidget(self.list_widget)
+            
+            # 소프트웨어 목록 추가
+            for code in sorted(self.software_dict.keys()):
+                self.list_widget.addItem(code)
+            
+            # 버튼 레이아웃
+            button_layout = QtGui.QHBoxLayout()
+            
+            # 확인 버튼
+            ok_button = QtGui.QPushButton("확인")
+            ok_button.clicked.connect(self.accept_selection)
+            button_layout.addWidget(ok_button)
+            
+            # 취소 버튼
+            cancel_button = QtGui.QPushButton("취소")
+            cancel_button.clicked.connect(self.reject)
+            button_layout.addWidget(cancel_button)
+            
+            main_layout.addLayout(button_layout)
+            
+            # 다이얼로그를 화면 중앙에 배치
+            self.center_dialog()
+        
+        def center_dialog(self):
+            frame_geometry = self.frameGeometry()
+            screen_center = QtGui.QDesktopWidget().availableGeometry().center()
+            frame_geometry.moveCenter(screen_center)
+            self.move(frame_geometry.topLeft())
+        
+        def accept_selection(self):
+            # 선택된 항목 가져오기
+            selected_items = [item.text() for item in self.list_widget.selectedItems()]
+            self.selected_items = selected_items
+            self.accept()
+    
+    # 다이얼로그 실행
+    dialog = SoftwareSelectorDialog(software_dict)
+    result = dialog.exec_()
+    
+    # OK 버튼을 눌렀고 선택된 항목이 있으면
+    if result == QtGui.QDialog.Accepted and dialog.selected_items:
+        return dialog.selected_items
+    
+    return None
 
 
 
@@ -76,6 +175,24 @@ class AppLaunch(tank.Hook):
         
         packages = get_rez_packages(sg,app_name,version,system,project)
 
+        # GUI를 통해 추가 플러그인 선택
+        additional_plugins = show_software_selector()
+        
+        # 선택된 추가 플러그인이 있으면 packages에 추가
+        if additional_plugins:
+            if not packages:
+                packages = []
+            if isinstance(packages, str):
+                packages = [packages]
+            if not isinstance(packages, list):
+                packages = list(packages) if packages else []
+            
+            # 추가 플러그인을 packages에 추가
+            packages.extend(additional_plugins)
+            self.logger.info('추가로 선택된 플러그인: %s' % ', '.join(additional_plugins))
+        print("packages--------------------------------")
+        print(packages)
+        print("packages--------------------------------")
         try:
             import rez as _
         except ImportError:
@@ -135,10 +252,6 @@ def get_rez_packages(sg,app_name,version,system,project):
         packages = [ x for x in packages.split(",")] 
     else:
         packages = None
-    print(packages)
-    print(packages)
-    print(packages)
-    print(packages)
     return packages
 
 
