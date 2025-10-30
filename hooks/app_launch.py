@@ -22,7 +22,6 @@ import platform
 import tank
 import sgtk
 
-# Qt GUI 사용
 try:
     from sgtk.platform.qt import QtGui, QtCore
     GUI_AVAILABLE = True
